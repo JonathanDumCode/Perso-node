@@ -116,6 +116,56 @@ function TimeSub(t1,t2) {
 	return msToHoraie(HoraireToMs(t1)-HoraireToMs(t2))
 }
 
+function contient(ls,mot,getel){
+	let res = [];
+	for (var i = 0; i < ls.length; i++) {
+		if (getel(ls[i]).toLowerCase().includes(mot)) {
+			res.push(ls[i]);
+		}
+	}
+	return res;
+}
+function sommeAsset(ls,tab,getel){
+	let res = [];
+	for(var i = 0; i < ls.length; i++){
+		let cpt = 0;
+		for (let j = 0; j < tab.length; j++) {
+			for (let k = 0; k < tab[j].length; k++) {
+				if (getel(ls[i]).toLowerCase().includes(getel(tab[j][k]).toLowerCase())) {
+					cpt++;
+				}
+			}
+		}
+			
+		res.push([ls[i],cpt]);
+	}
+	return res;
+}
+function plusProche(ls,recherche, getel){
+	let mots = recherche.toLowerCase().split(" ");
+	let raw = [];
+	for (var i = 0; i < mots.length; i++) {
+		raw.push(contient(ls,mots[i],getel));
+	}
+	let rawPondere = sommeAsset(ls,raw,getel);
+	
+	rawPondere.sort((a,b)=>{
+		return b[1]-a[1];
+	});
+	let res =[]
+	for (var i = 0; i < rawPondere.length; i++) {
+		if (rawPondere[i][1] > 0) {
+			res.push(rawPondere[i][0]);
+		}
+		
+	}
+	return res;
+}
+
+
+function rechercheAsset(ls,recherche,getel){
+	return plusProche(ls,recherche,getel)
+}
 
 module.exports = {
 	distance : dist,
@@ -130,6 +180,7 @@ module.exports = {
 	affHoraire : affHoraire,
 	TimeAdd : TimeAdd,
 	TimeSub : TimeSub,
+	rechercheAsset : rechercheAsset,
 	test : function (FU) {
 		let ch = FU.setChono();
 		let x1 = 0;

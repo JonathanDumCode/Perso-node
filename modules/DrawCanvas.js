@@ -3,6 +3,7 @@
 Canvas
 ####################################################*/
 const { createCanvas, loadImage } = require('canvas');
+const Save = require('./Save.js');
 
 
 function tabToColor(c) {
@@ -95,6 +96,29 @@ function loadImgs(links,res,callback,w=-1,h=-1){
 	},w,h);
 }
 
+function compresse(input,output,CMax){
+	loadImg(input,(img)=>{
+		let width = img[1].width;
+		let height = img[1].height;
+		let newWidth = 0;
+		let newHeight = 0;
+
+		if(width>height){
+			newWidth = CMax;
+			newHeight = Math.floor(height*newWidth/width);
+
+		}else{
+			newHeight = CMax;
+			newWidth = Math.floor(width*newHeight/height);
+		}
+
+		let env = setEnv(newWidth,newHeight);
+		printEnv(env,img,0,0,newWidth,newHeight);
+		Save.PNG(env,output)
+	})
+
+}
+
 module.exports = {
 	init : setEnv,
 	printEnv:printEnv,
@@ -103,5 +127,6 @@ module.exports = {
 	recStroke : rectangleS,
 	recFill : rectangleF,
 	loadImg : loadImg,
-	loadImgs : loadImgs
+	loadImgs : loadImgs,
+	compresse : compresse
 }
