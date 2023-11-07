@@ -313,7 +313,7 @@ module.exports = {
 	},
 
 	testChaire:function(Perlin,Gif,Draw,FU){
-		let w = 128;
+		let w = 32;
 		let h = w;
 		let nb = 100;
 		let c = 25;
